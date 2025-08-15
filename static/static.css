@@ -1,0 +1,112 @@
+/* ====== General Layout ====== */
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    background: #f5f7fa;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* ====== Header ====== */
+h1 {
+    text-align: center;
+    color: #0077b6;
+    margin-bottom: 1rem;
+}
+
+/* ====== Cards ====== */
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    transition: transform 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* ====== Forms ====== */
+input[type="text"], 
+input[type="date"], 
+button {
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+button {
+    background: #0077b6;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+button:hover {
+    background: #005f86;
+}
+
+/* ====== Error Messages ====== */
+.error {
+    color: #d62828;
+    font-weight: bold;
+}
+
+/* ====== Forecast Cards ====== */
+.forecast-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.forecast-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    width: 120px;
+    background: #fafafa;
+}
+
+/* ====== Table (Saved Queries) ====== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 0.6rem;
+    text-align: left;
+}
+th {
+    background-color: #e9ecef;
+}
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.actions form {
+    display: inline;
+}
+.actions button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* ====== Links ====== */
+a {
+    text-decoration: none;
+    color: #0077b6;
+}
+a:hover {
+    text-decoration: underline;
+}

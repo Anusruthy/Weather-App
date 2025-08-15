@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Edit Weather Query</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Edit Saved Weather</h2>
+    <form method="post" action="{{ url_for('update_weather', query_id=query.id) }}" class="card">
+      <label>Location Name:</label>
+      <input type="text" name="location_name" value="{{ query.location_name }}" required>
+
+      <label>Latitude:</label>
+      <input type="text" name="lat" value="{{ query.lat }}" required>
+
+      <label>Longitude:</label>
+      <input type="text" name="lon" value="{{ query.lon }}" required>
+
+      <label>Start Date:</label>
+      <input type="date" name="start_date" value="{{ query.start_date }}" required>
+
+      <label>End Date:</label>
+      <input type="date" name="end_date" value="{{ query.end_date }}" required>
+
+      <button type="submit">Update</button>
+    </form>
+  </div>
+</body>
+</html>

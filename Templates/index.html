@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Simple Weather | Anusruthy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+.forecast-container {
+    display: flex !important;
+    gap: 1rem;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤 Simple Weather — by Anusruthy</h1>
+    
+    <details>
+      <summary>Info</summary>
+      <p>
+        Hiring and getting hired for product management roles is hard.  
+        In the short timeframe of an interview, it is difficult to precisely assess and display the necessary, complex skills.  
+        Product Managers play key roles in a company. Hiring for those positions should not be a guessing game.  
+        It is our vision to make it simple and beneficial for Product Managers to accurately display their skills  
+        and empower hiring companies to choose the right Product Manager every time.
+      </p>
+    </details>
+
+    <!-- Search Form -->
+    <form method="get" action="/" class="card">
+      <label for="location">Enter a location (city/town/zip):</label>
+      <input id="location" name="location" type="text" placeholder="e.g., Kochi, IN or 682001" value="{{ query|e }}">
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <!-- Error Message -->
+    {% if error %}
+      <div class="card error">{{ error }}</div>
+    {% endif %}
+
+    <!-- Current Weather -->
+    {% if weather %}
+      <div class="card weather-card">
+        <div class="title">{{ place }}</div>
+        <img alt="Weather icon" src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png">
+        <p><strong>{{ weather.temp }}°C</strong> — {{ weather.description }}</p>
+        <p>Feels like: {{ weather.feels_like }}°C</p>
+        <p>Humidity: {{ weather.humidity }}%</p>
+        <p>Wind speed: {{ weather.wind_speed }} m/s</p>
+      </div>
+
+      <!-- Save Weather Form -->
+      <form method="post" action="/save" class="card save-form">
+        <input type="hidden" name="location_name" value="{{ place }}">
+        <input type="hidden" name="lat" value="{{ geo_lat }}">
+        <input type="hidden" name="lon" value="{{ geo_lon }}">
+
+        <label>Start Date:</label>
+        <input type="date" name="start_date" required>
+
+        <label>End Date:</label>
+        <input type="date" name="end_date" required>
+
+        <button type="submit" class="btn-primary">Save This Weather</button>
+      </form>
+    {% endif %}
+    
+    <!-- 5-Day Forecast -->
+    {% if forecast %}
+      <div class="card">
+        <h3>5-Day Forecast</h3>
+        <div class="forecast-container">
+          {% for day in forecast %}
+            <div class="forecast-card">
+              <strong>{{ day.date }}</strong><br>
+              <img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="icon"><br>
+              {{ day.temp }}°C<br>
+              <small>{{ day.description }}</small>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Saved Queries -->
+    {% if saved_queries %}
+      <div class="card">
+        <h3>Saved Searches</h3>
+        <ul class="saved-list">
+          {% for q in saved_queries %}
+            <li>
+              {{ q.location_name }} ({{ q.start_date }} to {{ q.end_date }})
+              <a class="delete-link" href="{{ url_for('delete_weather', query_id=q.id) }}">Delete</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Saved Weather Queries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Saved Weather Queries</h1>
+    <p><a href="{{ url_for('index') }}">← Back to Weather Search</a></p>
+
+    {% if queries %}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Location</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for q in queries %}
+            <tr>
+              <td>{{ q.id }}</td>
+              <td>{{ q.location_name }}</td>
+              <td>{{ q.lat }}</td>
+              <td>{{ q.lon }}</td>
+              <td>{{ q.start_date }}</td>
+              <td>{{ q.end_date }}</td>
+              <td class="actions">
+                <a href="{{ url_for('update_weather', query_id=q.id) }}" style="color: green;">Edit</a>
+                <form method="post" action="{{ url_for('delete_weather', query_id=q.id) }}" style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No saved weather queries found.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
+
