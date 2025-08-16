@@ -5,6 +5,8 @@
   <title>Simple Weather | Anusruthy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
 .forecast-container {
     display: flex !important;
@@ -39,7 +41,7 @@
       <div class="card error">{{ error }}</div>
     {% endif %}
 
-    <!-- Current Weather -->
+        <!-- Current Weather -->
     {% if weather %}
       <div class="card weather-card">
         <div class="title">{{ place }}</div>
@@ -64,6 +66,20 @@
 
         <button type="submit" class="btn-primary">Save This Weather</button>
       </form>
+
+      <!-- Map Integration -->
+      <div id="map" style="height: 400px; margin-top: 1rem; border-radius: 12px;"></div>
+      <script>
+        var map = L.map('map').setView([{{ geo_lat }}, {{ geo_lon }}], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ geo_lat }}, {{ geo_lon }}]).addTo(map)
+            .bindPopup("<b>{{ place }}</b><br>{{ weather.temp }}°C, {{ weather.description }}")
+            .openPopup();
+      </script>
     {% endif %}
     
     <!-- 5-Day Forecast -->

@@ -13,10 +13,16 @@ body {
 }
 
 /* ====== Header ====== */
-h1 {
+h1, h3 {
     text-align: center;
     color: #0077b6;
     margin-bottom: 1rem;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
 }
 
 /* ====== Cards ====== */
@@ -35,45 +41,79 @@ h1 {
 /* ====== Forms ====== */
 input[type="text"], 
 input[type="date"], 
-button {
+select {
+    width: 100%;
     padding: 0.7rem;
     border-radius: 8px;
     border: 1px solid #ccc;
     margin-top: 0.5rem;
-    width: 100%;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+input:focus {
+    border-color: #0077b6;
+    box-shadow: 0 0 5px rgba(0,119,182,0.4);
+    outline: none;
 }
 
 button {
-    background: #0077b6;
-    color: white;
+    padding: 0.7rem 1.2rem;
     border: none;
-    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    background: #0077b6;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 button:hover {
     background: #005f86;
+    transform: translateY(-2px);
 }
 
-/* ====== Error Messages ====== */
+/* ====== Filter & Export Section ====== */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+.filter-section input,
+.filter-section select {
+    flex: 1;
+    min-width: 150px;
+}
+.export-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.export-buttons a {
+    background: #38b000;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+.export-buttons a:hover {
+    background: #2d8600;
+}
+
+/* ====== Error / Success Messages ====== */
 .error {
-    color: #d62828;
+    color: #a94442;
+    background: #f2dede;
+    padding: 0.8rem;
+    border-radius: 8px;
     font-weight: bold;
 }
-
-/* ====== Forecast Cards ====== */
-.forecast-container {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-.forecast-item {
-    border: 1px solid #ddd;
+.success {
+    color: #3c763d;
+    background: #dff0d8;
+    padding: 0.8rem;
     border-radius: 8px;
-    padding: 0.5rem;
-    text-align: center;
-    width: 120px;
-    background: #fafafa;
+    font-weight: bold;
 }
 
 /* ====== Table (Saved Queries) ====== */
@@ -81,14 +121,22 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 th, td {
-    border: 1px solid #ddd;
-    padding: 0.6rem;
+    border-bottom: 1px solid #eee;
+    padding: 0.8rem;
     text-align: left;
 }
 th {
-    background-color: #e9ecef;
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+tr:hover {
+    background-color: #f9f9f9;
 }
 .actions {
     display: flex;
@@ -100,7 +148,51 @@ th {
 .actions button {
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
+    border-radius: 6px;
 }
+.actions .edit-btn {
+    background: #ffb703;
+}
+.actions .edit-btn:hover {
+    background: #e09c00;
+}
+.actions .delete-btn {
+    background: #d62828;
+}
+.actions .delete-btn:hover {
+    background: #a71d1d;
+}
+
+/* ====== Weather Forecast Cards ====== */
+.forecast-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.forecast-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 0.8rem;
+    text-align: center;
+    width: 140px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+.forecast-card:hover {
+    transform: scale(1.05);
+}
+
+/* ====== Map Styling ====== */
+#map {
+    height: 400px;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 12px;
+    border: 2px solid #0077b6;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
 
 /* ====== Links ====== */
 a {

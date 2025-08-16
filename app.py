@@ -13,10 +13,14 @@ Session = sessionmaker(bind=engine)
 
 import os
 import requests
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify, Response
 from dotenv import load_dotenv
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
+import csv
+import io
+import json
+import dicttoxml
 
 # Load environment variables from .env
 load_dotenv()
@@ -159,9 +163,24 @@ def save_weather():
 @app.route("/saved")
 def view_saved():
     session = Session()
-    queries = session.query(WeatherQuery).all()
+    lat = request.args.get("lat")
+    lon = request.args.get("lon")
+
+    query = session.query(WeatherQuery)
+
+    if lat and lon:
+        try:
+            query = query.filter(
+                (WeatherQuery.lat == float(lat)) &
+                (WeatherQuery.lon == float(lon))
+            )
+        except ValueError:
+            pass  # if not valid numbers, ignore
+
+    queries = query.all()
     session.close()
     return render_template("saved.html", queries=queries)
+
 
 @app.route("/delete/<int:query_id>", methods=["POST"])
 def delete_weather(query_id):
@@ -204,6 +223,125 @@ def update_weather(query_id):
     # If GET, show the edit form
     session.close()
     return render_template("edit.html", query=query)
+
+@app.route("/api/weather", methods=["GET"])
+def api_weather():
+    session = Session()
+
+    # Get filter parameters from query string
+    location_filter = request.args.get("location", "").strip().lower()
+    start_date_filter = request.args.get("start_date", "").strip()
+    end_date_filter = request.args.get("end_date", "").strip()
+
+    query = session.query(WeatherQuery)
+
+    # Filter by location name if provided
+    if location_filter:
+        query = query.filter(WeatherQuery.location_name.ilike(f"%{location_filter}%"))
+
+    # Filter by start and end dates if provided
+    if start_date_filter:
+        try:
+            start_dt = datetime.strptime(start_date_filter, "%Y-%m-%d").date()
+            query = query.filter(WeatherQuery.start_date >= start_dt)
+        except ValueError:
+            pass  # Ignore invalid date format
+
+    if end_date_filter:
+        try:
+            end_dt = datetime.strptime(end_date_filter, "%Y-%m-%d").date()
+            query = query.filter(WeatherQuery.end_date <= end_dt)
+        except ValueError:
+            pass
+
+    queries = query.all()
+
+    # Convert to JSON-serializable format
+    data = [
+        {
+            "id": q.id,
+            "location_name": q.location_name,
+            "lat": q.lat,
+            "lon": q.lon,
+            "start_date": q.start_date.strftime("%Y-%m-%d"),
+            "end_date": q.end_date.strftime("%Y-%m-%d")
+        }
+        for q in queries
+    ]
+    
+    session.close()
+    return jsonify(data)
+
+@app.route("/export_weather")
+def export_weather():
+    export_format = request.args.get("format", "csv").lower()
+    location_filter = request.args.get("location", "").strip().lower()
+    start_date_filter = request.args.get("start_date", "").strip()
+    end_date_filter = request.args.get("end_date", "").strip()
+    lat_filter = request.args.get("lat")
+    lon_filter = request.args.get("lon")
+
+    session = Session()
+    query = session.query(WeatherQuery)
+
+    # Apply filters
+    if location_filter:
+        query = query.filter(WeatherQuery.location_name.ilike(f"%{location_filter}%"))
+    if start_date_filter:
+        try:
+            start_dt = datetime.strptime(start_date_filter, "%Y-%m-%d").date()
+            query = query.filter(WeatherQuery.start_date >= start_dt)
+        except ValueError:
+            pass
+    if end_date_filter:
+        try:
+            end_dt = datetime.strptime(end_date_filter, "%Y-%m-%d").date()
+            query = query.filter(WeatherQuery.end_date <= end_dt)
+        except ValueError:
+            pass
+
+    # 👉 Add this block for lat/lon filtering
+    if lat_filter and lon_filter:
+        try:
+            query = query.filter(
+                (WeatherQuery.lat == float(lat_filter)) &
+                (WeatherQuery.lon == float(lon_filter))
+            )
+        except ValueError:
+            pass
+
+    queries = query.all()
+    session.close()
+
+    # Convert to list of dicts
+    data = [
+        {
+            "id": q.id,
+            "location_name": q.location_name,
+            "lat": q.lat,
+            "lon": q.lon,
+            "start_date": q.start_date.strftime("%Y-%m-%d"),
+            "end_date": q.end_date.strftime("%Y-%m-%d"),
+        }
+        for q in queries
+    ]
+
+    if not data:
+        return Response("No data found for given filters.", mimetype="text/plain")
+
+    # Export logic
+    if export_format == "json":
+        return Response(json.dumps(data, indent=4), mimetype="application/json")
+    elif export_format == "xml":
+        xml_data = dicttoxml.dicttoxml(data, custom_root='weather_queries', attr_type=False)
+        return Response(xml_data, mimetype="application/xml")
+    else:  # default CSV
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=data[0].keys())
+        writer.writeheader()
+        writer.writerows(data)
+        return Response(output.getvalue(), mimetype="text/csv",
+                        headers={"Content-Disposition": "attachment;filename=weather_queries.csv"})
 
 
 if __name__ == "__main__":
