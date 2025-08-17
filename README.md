@@ -129,8 +129,8 @@ This app allows users to:
 ### Weather app
 ![Weather App](images/Weather_app.jpg)  
 
-### 💾 Forecasting example 
-![Forecasting example ](images/Forecasting_example .jpg)  
+## Forecasting example 
+![Forecasting example ](images/Forecasting_example.jpg)
 
 
 ## 📈 Future Improvements  
@@ -141,15 +141,19 @@ This app allows users to:
 - Dark mode UI support  
 
 
-## 🙌 Acknowledgements  
+## Acknowledgements  
 - [OpenWeatherMap](https://openweathermap.org/) for weather data  
 - [Leaflet.js](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/) for maps  
 - [dicttoxml](https://github.com/quandyfactory/dicttoxml) for XML export  
 
 
-## 📜 License  
-This project is for educational purposes only.  
-Developed by **Anusruthy R**.  
+## 📜 Project Note  
+This project was developed as part of a **company assessment task**.  
+All company-related details included in the app are for **educational/demo purposes only**.  
+
+Developed by **Anusruthy R** ✨  
+
+
 
 
 
