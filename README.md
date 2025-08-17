@@ -41,7 +41,7 @@ This app allows users to:
 - **Leaflet.js** (interactive maps)  
 
 ### Deployment & Containerization  
-- **Docker** (for containerized app execution)  
+- **Docker** 
 
 ---
 
@@ -95,6 +95,7 @@ This app allows users to:
    docker run -p 5000:5000 weather-app
    ```
 - Then open the localhost server in both.
+  👉 http://127.0.0.1:5000
 - Running the app using Docker container is the easiest way.
 
 
@@ -131,6 +132,9 @@ This app allows users to:
 
 ## Forecasting example 
 ![Forecasting example ](images/Forecasting_example.jpg)
+
+##Saved Queries
+![Saved Queries](images/Saved_queries.jpg)
 
 
 ## 📈 Future Improvements  
