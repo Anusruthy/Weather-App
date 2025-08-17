@@ -133,8 +133,8 @@ This app allows users to:
 ## Forecasting example 
 ![Forecasting example ](images/Forecasting_example.jpg)
 
-##Saved Queries
-![Saved Queries](images/Saved_queries.jpg)
+## Saved queries
+![Saved queries](images/Saved_queries.jpg)
 
 
 ## 📈 Future Improvements  
