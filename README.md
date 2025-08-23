@@ -151,10 +151,6 @@ This app allows users to:
 - [dicttoxml](https://github.com/quandyfactory/dicttoxml) for XML export  
 
 
-## 📜 Project Note  
-This project was developed as part of a **company assessment task**.  
-All company-related details included in the app are for **educational/demo purposes only**.  
-
 Developed by **Anusruthy R** ✨  
 
 
